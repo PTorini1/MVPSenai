@@ -4,6 +4,7 @@ using MVPSenai.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVPSenai.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231111154552_validacoes")]
+    partial class validacoes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -312,7 +315,7 @@ namespace MVPSenai.Data.Migrations
             modelBuilder.Entity("MVPSenai.Models.Logs", b =>
                 {
                     b.HasOne("MVPSenai.Models.Funcionario", "Funcionario")
-                        .WithMany("Logs")
+                        .WithMany()
                         .HasForeignKey("FuncionarioId");
 
                     b.Navigation("Funcionario");
@@ -367,11 +370,6 @@ namespace MVPSenai.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("MVPSenai.Models.Funcionario", b =>
-                {
-                    b.Navigation("Logs");
                 });
 #pragma warning restore 612, 618
         }

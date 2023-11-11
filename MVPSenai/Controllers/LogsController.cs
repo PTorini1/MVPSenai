@@ -10,90 +10,90 @@ using MVPSenai.Models;
 
 namespace MVPSenai.Controllers
 {
-    public class FuncionariosController : Controller
+    public class LogsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public FuncionariosController(ApplicationDbContext context)
+        public LogsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Funcionarios
+        // GET: Logs
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.funcionarios.Include(f => f.Setor);
+            var applicationDbContext = _context.logs.Include(l => l.Funcionario);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Funcionarios/Details/5
+        // GET: Logs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.funcionarios == null)
+            if (id == null || _context.logs == null)
             {
                 return NotFound();
             }
 
-            var funcionario = await _context.funcionarios
-                .Include(f => f.Setor)
-                .FirstOrDefaultAsync(m => m.IdFuncionario == id);
-            if (funcionario == null)
+            var logs = await _context.logs
+                .Include(l => l.Funcionario)
+                .FirstOrDefaultAsync(m => m.IdLogs == id);
+            if (logs == null)
             {
                 return NotFound();
             }
 
-            return View(funcionario);
+            return View(logs);
         }
 
-        // GET: Funcionarios/Create
+        // GET: Logs/Create
         public IActionResult Create()
         {
-            ViewData["SetorId"] = new SelectList(_context.setores, "IdSetor", "IdSetor");
+            ViewData["FuncionarioId"] = new SelectList(_context.funcionarios, "IdFuncionario", "Email");
             return View();
         }
 
-        // POST: Funcionarios/Create
+        // POST: Logs/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdFuncionario,Nome,Email,Senha,Equipamentos,SetorId")] Funcionario funcionario)
+        public async Task<IActionResult> Create([Bind("IdLogs,FuncionarioId,Data,HorasTrabalhadas")] Logs logs)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(funcionario);
+                _context.Add(logs);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SetorId"] = new SelectList(_context.setores, "IdSetor", "IdSetor", funcionario.SetorId);
-            return View(funcionario);
+            ViewData["FuncionarioId"] = new SelectList(_context.funcionarios, "IdFuncionario", "Email", logs.FuncionarioId);
+            return View(logs);
         }
 
-        // GET: Funcionarios/Edit/5
+        // GET: Logs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.funcionarios == null)
+            if (id == null || _context.logs == null)
             {
                 return NotFound();
             }
 
-            var funcionario = await _context.funcionarios.FindAsync(id);
-            if (funcionario == null)
+            var logs = await _context.logs.FindAsync(id);
+            if (logs == null)
             {
                 return NotFound();
             }
-            ViewData["SetorId"] = new SelectList(_context.setores, "IdSetor", "IdSetor", funcionario.SetorId);
-            return View(funcionario);
+            ViewData["FuncionarioId"] = new SelectList(_context.funcionarios, "IdFuncionario", "Email", logs.FuncionarioId);
+            return View(logs);
         }
 
-        // POST: Funcionarios/Edit/5
+        // POST: Logs/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdFuncionario,Nome,Email,Senha,Equipamentos,SetorId")] Funcionario funcionario)
+        public async Task<IActionResult> Edit(int id, [Bind("IdLogs,FuncionarioId,Data,HorasTrabalhadas")] Logs logs)
         {
-            if (id != funcionario.IdFuncionario)
+            if (id != logs.IdLogs)
             {
                 return NotFound();
             }
@@ -102,12 +102,12 @@ namespace MVPSenai.Controllers
             {
                 try
                 {
-                    _context.Update(funcionario);
+                    _context.Update(logs);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FuncionarioExists(funcionario.IdFuncionario))
+                    if (!LogsExists(logs.IdLogs))
                     {
                         return NotFound();
                     }
@@ -118,51 +118,51 @@ namespace MVPSenai.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SetorId"] = new SelectList(_context.setores, "IdSetor", "IdSetor", funcionario.SetorId);
-            return View(funcionario);
+            ViewData["FuncionarioId"] = new SelectList(_context.funcionarios, "IdFuncionario", "Email", logs.FuncionarioId);
+            return View(logs);
         }
 
-        // GET: Funcionarios/Delete/5
+        // GET: Logs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.funcionarios == null)
+            if (id == null || _context.logs == null)
             {
                 return NotFound();
             }
 
-            var funcionario = await _context.funcionarios
-                .Include(f => f.Setor)
-                .FirstOrDefaultAsync(m => m.IdFuncionario == id);
-            if (funcionario == null)
+            var logs = await _context.logs
+                .Include(l => l.Funcionario)
+                .FirstOrDefaultAsync(m => m.IdLogs == id);
+            if (logs == null)
             {
                 return NotFound();
             }
 
-            return View(funcionario);
+            return View(logs);
         }
 
-        // POST: Funcionarios/Delete/5
+        // POST: Logs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.funcionarios == null)
+            if (_context.logs == null)
             {
-                return Problem("Entity set 'ApplicationDbContext.funcionarios'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.logs'  is null.");
             }
-            var funcionario = await _context.funcionarios.FindAsync(id);
-            if (funcionario != null)
+            var logs = await _context.logs.FindAsync(id);
+            if (logs != null)
             {
-                _context.funcionarios.Remove(funcionario);
+                _context.logs.Remove(logs);
             }
             
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool FuncionarioExists(int id)
+        private bool LogsExists(int id)
         {
-          return (_context.funcionarios?.Any(e => e.IdFuncionario == id)).GetValueOrDefault();
+          return (_context.logs?.Any(e => e.IdLogs == id)).GetValueOrDefault();
         }
     }
 }

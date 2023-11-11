@@ -4,6 +4,7 @@ using MVPSenai.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVPSenai.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231111151407_mudancaSetor")]
+    partial class mudancaSetor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,11 +35,13 @@ namespace MVPSenai.Data.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Equipamentos")
                         .HasColumnType("bit");
+
+                    b.Property<int>("IdSetor")
+                        .HasColumnType("int");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -44,15 +49,14 @@ namespace MVPSenai.Data.Migrations
 
                     b.Property<string>("Senha")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("SetorId")
+                    b.Property<int?>("setorIdSetor")
                         .HasColumnType("int");
 
                     b.HasKey("IdFuncionario");
 
-                    b.HasIndex("SetorId");
+                    b.HasIndex("setorIdSetor");
 
                     b.ToTable("funcionarios");
                 });
@@ -68,15 +72,18 @@ namespace MVPSenai.Data.Migrations
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("FuncionarioId")
+                    b.Property<int>("HorasTrabalhadas")
                         .HasColumnType("int");
 
-                    b.Property<int>("HorasTrabalhadas")
+                    b.Property<int>("IdFuncionario")
+                        .HasColumnType("int");
+
+                    b.Property<int>("funcionarioIdFuncionario")
                         .HasColumnType("int");
 
                     b.HasKey("IdLogs");
 
-                    b.HasIndex("FuncionarioId");
+                    b.HasIndex("funcionarioIdFuncionario");
 
                     b.ToTable("logs");
                 });
@@ -302,20 +309,22 @@ namespace MVPSenai.Data.Migrations
 
             modelBuilder.Entity("MVPSenai.Models.Funcionario", b =>
                 {
-                    b.HasOne("MVPSenai.Models.Setor", "Setor")
-                        .WithMany()
-                        .HasForeignKey("SetorId");
+                    b.HasOne("MVPSenai.Models.Setor", "setor")
+                        .WithMany("Funcionarios")
+                        .HasForeignKey("setorIdSetor");
 
-                    b.Navigation("Setor");
+                    b.Navigation("setor");
                 });
 
             modelBuilder.Entity("MVPSenai.Models.Logs", b =>
                 {
-                    b.HasOne("MVPSenai.Models.Funcionario", "Funcionario")
-                        .WithMany("Logs")
-                        .HasForeignKey("FuncionarioId");
+                    b.HasOne("MVPSenai.Models.Funcionario", "funcionario")
+                        .WithMany()
+                        .HasForeignKey("funcionarioIdFuncionario")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Funcionario");
+                    b.Navigation("funcionario");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -369,9 +378,9 @@ namespace MVPSenai.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MVPSenai.Models.Funcionario", b =>
+            modelBuilder.Entity("MVPSenai.Models.Setor", b =>
                 {
-                    b.Navigation("Logs");
+                    b.Navigation("Funcionarios");
                 });
 #pragma warning restore 612, 618
         }
