@@ -7,7 +7,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Cadastrar Novo Funcionario</a>
 </p>
 <table class="table">
     <thead>
@@ -49,9 +49,9 @@
                 @Html.DisplayFor(modelItem => item.Setor.NomeSetor)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdFuncionario">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdFuncionario">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdFuncionario">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.IdFuncionario">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.IdFuncionario">Detalhes</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdFuncionario">Deletar</a>
             </td>
         </tr>
 }
