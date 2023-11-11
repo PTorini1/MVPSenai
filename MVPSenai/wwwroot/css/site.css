@@ -21,3 +21,25 @@ body {
 header {
     background-color: rgb(206, 218, 216);
 }
+
+.login_logo {
+    height: 304px;
+    width: 318px;
+    margin-top: -50px;
+    margin-bottom: 50px;
+}
+
+.align-center{
+    height: 41em;
+    display: flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.login_width{
+    width: 100%;
+}
+
+.btn-color {
+    background-color: #2E5D6C;
+}
